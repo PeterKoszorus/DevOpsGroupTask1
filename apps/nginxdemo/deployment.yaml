@@ -29,3 +29,5 @@ spec:
             secretKeyRef:
               name: api-key-secret
               key: api-key
+        securityContext: #The img of nginxdemos/hello doesn't have any other user than root
+          #runAsNonRoot: true
