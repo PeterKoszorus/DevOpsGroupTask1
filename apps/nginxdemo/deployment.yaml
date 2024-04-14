@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginxdemo-deployment
+  namespace: devopsgroup
+spec:
+  replicas: 2  
+  selector:
+    matchLabels:
+      app: nginxdemo-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: nginxdemo-app
+    spec:
+      serviceAccountName: nginxdemo-deployment-service-account 
+      containers:
+      - name: nginxdemo-app
+        image: nginxdemos/hello
+        ports:
+        - containerPort: 80
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: api-key-secret
+              key: api-key
